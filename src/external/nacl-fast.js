@@ -1,45 +1,6 @@
 (function(nacl) {
 'use strict';
 
-
-// polyfill for TypedArray.prototype.slice()
-Uint8Array.prototype.slice = function(start, end) {
-	var len = this.length;
-	var relativeStart = start;
-	var k = (relativeStart < 0) ? max(len + relativeStart, 0) : Math.min(relativeStart, len);
-	var relativeEnd = (end === undefined) ? len : end;
-	var final = (relativeEnd < 0) ? max(len + relativeEnd, 0) : Math.min(relativeEnd, len);
-	var count = final - k;
-	var c = this.constructor;
-	var a = new c(count);
-	var n = 0;
-	while (k < final) {
-	    a[n] = JSON.parse(JSON.stringify(this[k]));
-	    k++;
-	    n++;
-	}
-	return a;
-}
-
-
-Float64Array.prototype.slice = function(start, end) {
-	var len = this.length;
-	var relativeStart = start;
-	var k = (relativeStart < 0) ? max(len + relativeStart, 0) : Math.min(relativeStart, len);
-	var relativeEnd = (end === undefined) ? len : end;
-	var final = (relativeEnd < 0) ? max(len + relativeEnd, 0) : Math.min(relativeEnd, len);
-	var count = final - k;
-	var c = this.constructor;
-	var a = new c(count);
-	var n = 0;
-	while (k < final) {
-	    a[n] = JSON.parse(JSON.stringify(this[k]));
-	    k++;
-	    n++;
-	}
-	return a;
-}
-
 // Ported in 2014 by Dmitry Chestnykh and Devi Mandiri.
 // Public domain.
 //
@@ -727,7 +688,7 @@ function crypto_sign_hash(sm, keypair, data, hasher) {
   reduce(seededHash);
   scalarbase(p, seededHash);
   pack(sm, p);
-  
+
   hasher.reset();
   hasher.update(sm.slice(0, 32));
   hasher.update(keypair.publicKey)
@@ -735,7 +696,7 @@ function crypto_sign_hash(sm, keypair, data, hasher) {
   hasher.finalize(result);
 
   reduce(result);
-  
+
 
   // muladd - this is from original tweetnacl-js
   var x = new Float64Array(64);
@@ -900,7 +861,7 @@ function unpack(r, p) {
   M(r[3], r[0], r[1]);
   return 0;
 }
-var 
+var
     crypto_scalarmult_BYTES = 32,
     crypto_scalarmult_SCALARBYTES = 32,
     crypto_sign_BYTES = 64,
